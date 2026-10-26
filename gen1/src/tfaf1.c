@@ -1,4 +1,4 @@
-﻿#include "tfafv1.h"
+#include "tfaf1.h"
 
 #define TFAF_MAGIC 0x2cb8858eu
 #define TFAF_FORMAT 0xfaf01000u
@@ -57,8 +57,8 @@ static tfaf_status spend(tfaf_volume *v, uint64_t amount) {
   v->work += amount;
   return TFAF_OK;
 }
-size_t tfafv1_workspace_size(uint32_t block_size) { return (size_t)block_size; }
-void tfafv1_init(tfaf_volume *v) {
+size_t tfaf1_workspace_size(uint32_t block_size) { return (size_t)block_size; }
+void tfaf1_init(tfaf_volume *v) {
   if (!v)
     return;
   bytes_zero(v, sizeof(*v));
@@ -164,10 +164,10 @@ static tfaf_status get_entry(tfaf_volume *v, uint32_t index, tfaf_file *f) {
     return s;
   return parse_entry(v, index, offset, f);
 }
-tfaf_status tfafv1_entry_at(tfaf_volume *v, uint32_t index, tfaf_file *f) {
+tfaf_status tfaf1_entry_at(tfaf_volume *v, uint32_t index, tfaf_file *f) {
   return get_entry(v, index, f);
 }
-tfaf_status tfafv1_entries_begin(tfaf_volume *v, tfaf_cursor *cursor) {
+tfaf_status tfaf1_entries_begin(tfaf_volume *v, tfaf_cursor *cursor) {
   if (!v || !cursor || !v->active)
     return TFAF_EINVAL;
   if (alias(cursor, sizeof(*cursor), v, sizeof(*v)) ||
@@ -178,7 +178,7 @@ tfaf_status tfafv1_entries_begin(tfaf_volume *v, tfaf_cursor *cursor) {
   set_owner(cursor->_owner, v, v->_generation);
   return TFAF_OK;
 }
-tfaf_status tfafv1_entries_next(tfaf_volume *v, tfaf_cursor *cursor,
+tfaf_status tfaf1_entries_next(tfaf_volume *v, tfaf_cursor *cursor,
                                 tfaf_file *file) {
   tfaf_status s;
   if (!v || !cursor || !file || !v->active ||
@@ -293,14 +293,14 @@ static tfaf_status validate_impl(tfaf_volume *v) {
     return TFAF_ECORRUPT;
   return TFAF_OK;
 }
-tfaf_status tfafv1_validate(tfaf_volume *v, uint64_t limit) {
+tfaf_status tfaf1_validate(tfaf_volume *v, uint64_t limit) {
   if (!v || !v->active)
     return TFAF_EINVAL;
   v->work = 0;
   v->work_limit = limit ? limit : TFAF_DEFAULT_WORK;
   return validate_impl(v);
 }
-tfaf_status tfafv1_mount(tfaf_volume *v, const tfaf_reader *r, void *workspace,
+tfaf_status tfaf1_mount(tfaf_volume *v, const tfaf_reader *r, void *workspace,
                           size_t workspace_size, uint64_t work_limit) {
   uint8_t header[16];
   uint64_t disk_bytes, table_start, content_start;
@@ -392,7 +392,7 @@ fail: {
   return s;
 }
 }
-void tfafv1_unmount(tfaf_volume *v) {
+void tfaf1_unmount(tfaf_volume *v) {
   if (!v)
     return;
   uint32_t generation = v->_cookie == TFAF_COOKIE ? v->_generation + 1 : 1;
@@ -428,7 +428,7 @@ static tfaf_status canonical(tfaf_volume *v, const tfaf_file *f,
     return TFAF_EINVAL;
   return TFAF_OK;
 }
-tfaf_status tfafv1_file_name(tfaf_volume *v, const tfaf_file *f,
+tfaf_status tfaf1_file_name(tfaf_volume *v, const tfaf_file *f,
                              uint8_t *dst, size_t capacity,
                              size_t *name_length) {
   tfaf_file actual;
@@ -456,7 +456,7 @@ tfaf_status tfafv1_file_name(tfaf_volume *v, const tfaf_file *f,
   }
   return s;
 }
-tfaf_status tfafv1_lookup(tfaf_volume *v, const uint8_t *name, size_t length,
+tfaf_status tfaf1_lookup(tfaf_volume *v, const uint8_t *name, size_t length,
                           tfaf_file *out) {
   uint64_t at = 16;
   tfaf_status s;
@@ -502,7 +502,7 @@ tfaf_status tfafv1_lookup(tfaf_volume *v, const uint8_t *name, size_t length,
   }
   return TFAF_ENOTFOUND;
 }
-tfaf_status tfafv1_pread(tfaf_volume *v, const tfaf_file *f, uint64_t offset,
+tfaf_status tfaf1_pread(tfaf_volume *v, const tfaf_file *f, uint64_t offset,
                          void *destination, size_t length, size_t *bytes_read) {
   tfaf_file actual;
   uint64_t pos;

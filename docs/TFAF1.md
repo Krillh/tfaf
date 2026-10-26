@@ -1,4 +1,7 @@
-﻿# Tiny Floppy Archive Format (TFAF)
+# TFAF1: Tiny Floppy Archive Format
+
+TFAF1 is TFAF generation 1. A future TFAF2 would be generation 2. This
+document defines TFAF1, currently the only defined generation.
 
 TFAF is a small, read-only archive layout for block devices whose contents are
 written as a complete image and then retained until the device is wiped. It is

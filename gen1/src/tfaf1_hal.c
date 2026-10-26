@@ -1,4 +1,4 @@
-﻿#include "tfafv1_hal.h"
+#include "tfaf1_hal.h"
 #include "../dependencies/hal.h"
 
 #define OP_ROOT 0x00
@@ -34,7 +34,7 @@ static int call_exact(tfaf_hal_device *d, int32_t operation, const void *args,
   }
   return 0;
 }
-tfaf_status tfafv1_hal_open(tfaf_hal_device *d, const uint8_t uuid[16]) {
+tfaf_status tfaf1_hal_open(tfaf_hal_device *d, const uint8_t uuid[16]) {
   uint8_t response[4];
   if (!d || !uuid)
     return TFAF_EINVAL;
@@ -88,7 +88,7 @@ static int read_one(void *context, uint32_t block, uint8_t *destination,
   }
   return 0;
 }
-tfaf_reader tfafv1_hal_reader(tfaf_hal_device *d) {
+tfaf_reader tfaf1_hal_reader(tfaf_hal_device *d) {
   tfaf_reader reader;
   reader.read = read_one;
   reader.context = d;
@@ -96,7 +96,7 @@ tfaf_reader tfafv1_hal_reader(tfaf_hal_device *d) {
   reader.block_count = d ? d->block_count : 0;
   return reader;
 }
-tfaf_status tfafv1_hal_select_root(tfaf_hal_device *out, uint32_t max_devices) {
+tfaf_status tfaf1_hal_select_root(tfaf_hal_device *out, uint32_t max_devices) {
   int32_t count;
   uint32_t roots = 0;
   uint8_t selected[16];
@@ -139,6 +139,6 @@ tfaf_status tfafv1_hal_select_root(tfaf_hal_device *out, uint32_t max_devices) {
   }
   if (!roots)
     return TFAF_ENOTFOUND;
-  return tfafv1_hal_open(out, selected);
+  return tfaf1_hal_open(out, selected);
 }
 

@@ -1,5 +1,5 @@
-﻿#ifndef TFAFV1_H
-#define TFAFV1_H
+#ifndef TFAF1_H
+#define TFAF1_H
 #include <stddef.h>
 #include <stdint.h>
 
@@ -62,29 +62,29 @@ typedef struct {
 } tfaf_cursor;
 /* Call init once before mount. Workspace must hold at least one full block.
  * Handles are owned by one mount and expire on unmount. */
-size_t tfafv1_workspace_size(uint32_t block_size);
-void tfafv1_init(tfaf_volume *volume);
-tfaf_status tfafv1_mount(tfaf_volume *volume, const tfaf_reader *reader,
+size_t tfaf1_workspace_size(uint32_t block_size);
+void tfaf1_init(tfaf_volume *volume);
+tfaf_status tfaf1_mount(tfaf_volume *volume, const tfaf_reader *reader,
                          void *workspace, size_t workspace_size,
                          uint64_t work_limit);
-void tfafv1_unmount(tfaf_volume *volume);
-tfaf_status tfafv1_validate(tfaf_volume *volume, uint64_t work_limit);
+void tfaf1_unmount(tfaf_volume *volume);
+tfaf_status tfaf1_validate(tfaf_volume *volume, uint64_t work_limit);
 
 /* Entries are flat and ordered as stored. TFAF has no directories. */
-tfaf_status tfafv1_entry_at(tfaf_volume *volume, uint32_t index,
+tfaf_status tfaf1_entry_at(tfaf_volume *volume, uint32_t index,
                             tfaf_file *file);
-tfaf_status tfafv1_entries_begin(tfaf_volume *volume, tfaf_cursor *cursor);
-tfaf_status tfafv1_entries_next(tfaf_volume *volume, tfaf_cursor *cursor,
+tfaf_status tfaf1_entries_begin(tfaf_volume *volume, tfaf_cursor *cursor);
+tfaf_status tfaf1_entries_next(tfaf_volume *volume, tfaf_cursor *cursor,
                                 tfaf_file *file);
-tfaf_status tfafv1_lookup(tfaf_volume *volume, const uint8_t *name,
+tfaf_status tfaf1_lookup(tfaf_volume *volume, const uint8_t *name,
                           size_t name_length, tfaf_file *file);
 /* Copies the name and appends NUL; name_length excludes the terminator. */
-tfaf_status tfafv1_file_name(tfaf_volume *volume, const tfaf_file *file,
+tfaf_status tfaf1_file_name(tfaf_volume *volume, const tfaf_file *file,
                              uint8_t *destination, size_t capacity,
                              size_t *name_length);
 /* Reads up to length bytes. EOF succeeds with zero bytes; partial I/O reports
  * bytes_read together with TFAF_EIO. */
-tfaf_status tfafv1_pread(tfaf_volume *volume, const tfaf_file *file,
+tfaf_status tfaf1_pread(tfaf_volume *volume, const tfaf_file *file,
                           uint64_t offset, void *destination, size_t length,
                           size_t *bytes_read);
 

@@ -1,4 +1,4 @@
-﻿param(
+param(
   [ValidateSet('native', 'wasm')]
   [string]$Target = 'native'
 )
@@ -13,9 +13,9 @@ if ($Target -eq 'wasm') {
   $common += @('-target', 'wasm32-unknown-unknown', '-nostdlib')
 }
 
-& $clang @common -c (Join-Path $PSScriptRoot 'src/tfafv1.c') `
-  -o (Join-Path $outDir 'tfafv1.o')
+& $clang @common -c (Join-Path $PSScriptRoot 'src/tfaf1.c') `
+  -o (Join-Path $outDir 'tfaf1.o')
 if ($LASTEXITCODE -ne 0) { throw 'TFAF core compilation failed.' }
-& $clang @common -c (Join-Path $PSScriptRoot 'src/tfafv1_hal.c') `
-  -o (Join-Path $outDir 'tfafv1_hal.o')
+& $clang @common -c (Join-Path $PSScriptRoot 'src/tfaf1_hal.c') `
+  -o (Join-Path $outDir 'tfaf1_hal.o')
 if ($LASTEXITCODE -ne 0) { throw 'TFAF HAL adapter compilation failed.' }
