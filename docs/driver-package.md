@@ -10,14 +10,15 @@ separately.
   reader and the optional OpenWAC HAL adapter as separate archive members.
 - `include/tfaf1.h` declares the core reader API.
 - `include/tfaf1_hal.h` declares the OpenWAC HAL adapter API.
-- `docs/TFAF1.md` specifies the on-disk format.
 - `LICENSE` contains the project license.
 - `SHA256SUMS.txt` contains the archive's SHA-256 checksum.
 - `BUILD-METADATA.json` records the target triple, LTO flags, compiler and
   archiver versions, archive size, and archive checksum.
 
 The archive is not a standalone wasm program. Link it into the consumer's wasm
-module using a compatible Clang/LLVM toolchain with LTO enabled. Applications
+module using a compatible Clang/LLVM toolchain with LTO enabled. The release
+package omits source documentation; GitHub's tagged source archives include it.
+Applications
 using only the core reader need `tfaf1.h` and provide a block-read callback.
 Applications calling the HAL adapter also need `tfaf1_hal.h`; the resulting
 module uses the OpenWAC `hal` imports provided by its host.

@@ -23,8 +23,6 @@ $generationConfig = @{
     generation_number = 1
     release_tag_prefix = 'tfaf1'
     api_prefix = 'tfaf1'
-    specification = 'docs/TFAF1.md'
-    package_readme = 'docs/driver-package.md'
   }
 }[$Generation]
 if ($null -eq $generationConfig) { throw "No build configuration for $Generation." }
@@ -81,8 +79,7 @@ if ($LASTEXITCODE -ne 0) { throw "Archive creation failed for $archive." }
 New-Item -ItemType Directory -Force -Path $stageDir | Out-Null
 New-Item -ItemType Directory -Force -Path `
   (Join-Path $stageDir 'include'), `
-  (Join-Path $stageDir 'lib'), `
-  (Join-Path $stageDir 'docs') | Out-Null
+  (Join-Path $stageDir 'lib') | Out-Null
 
 Copy-Item -LiteralPath $archive -Destination (Join-Path $stageDir "lib/$archiveName")
 Copy-Item -LiteralPath (Join-Path $generationDir "include/$apiPrefix.h") `
@@ -91,10 +88,6 @@ Copy-Item -LiteralPath (Join-Path $generationDir "include/${apiPrefix}_hal.h") `
   -Destination (Join-Path $stageDir "include/${apiPrefix}_hal.h")
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'LICENSE') `
   -Destination (Join-Path $stageDir 'LICENSE')
-Copy-Item -LiteralPath (Join-Path $PSScriptRoot $generationConfig.specification) `
-  -Destination (Join-Path $stageDir "docs/$([IO.Path]::GetFileName($generationConfig.specification))")
-Copy-Item -LiteralPath (Join-Path $PSScriptRoot $generationConfig.package_readme) `
-  -Destination (Join-Path $stageDir 'README.md')
 
 $archiveHash = (Get-FileHash -LiteralPath (Join-Path $stageDir "lib/$archiveName") `
   -Algorithm SHA256).Hash.ToLowerInvariant()
