@@ -68,3 +68,19 @@ With Clang available on PATH, compile the freestanding core and HAL adapter:
 
 Objects are written to `out/native/` or `out/wasm/`. Applications that do not use
 OpenWAC's HAL only need `src/tfaf1.c` and `include/tfaf1.h`.
+
+## Tests
+
+Run the host-side interface and format conformance suite with:
+
+```powershell
+./test.ps1
+```
+
+The tests build complete images from the TFAF1 specification and exercise
+header and geometry checks, unaligned tables spanning blocks, printable names,
+allocation overlap, iteration, lookup, file-name copying, streaming reads,
+empty files, caller workspace limits, stale handles, partial read failures,
+validation work limits, and the optional HAL adapter. They call only the public
+driver interfaces; fixture encoding is implemented independently in
+`tests/test_support.c`.

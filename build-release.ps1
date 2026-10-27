@@ -1,7 +1,9 @@
 param(
   [Parameter(Mandatory = $true)]
   [ValidateSet('gen1')]
-  [string]$Generation
+  [string]$Generation,
+  [ValidatePattern('^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$')]
+  [string]$ReleaseVersion
 )
 
 $ErrorActionPreference = 'Stop'
@@ -19,6 +21,7 @@ $generationConfig = @{
   gen1 = @{
     format_name = 'TFAF1'
     generation_number = 1
+    release_tag_prefix = 'tfaf1'
     api_prefix = 'tfaf1'
     specification = 'docs/TFAF1.md'
     package_readme = 'docs/driver-package.md'
@@ -119,6 +122,10 @@ $metadata = [ordered]@{
   )
   archive_size_bytes = (Get-Item -LiteralPath (Join-Path $stageDir "lib/$archiveName")).Length
   archive_sha256 = $archiveHash
+}
+if ($ReleaseVersion) {
+  $metadata.release_version = $ReleaseVersion
+  $metadata.release_tag = "$($generationConfig.release_tag_prefix)/v$ReleaseVersion"
 }
 $metadataJson = ConvertTo-Json -InputObject $metadata -Depth 4
 [IO.File]::WriteAllText(
